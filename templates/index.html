@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Premier League Prediction</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background: url('/static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .custom-max-width {
+            max-width: none;
+            width: 50%;
+            max-width: 1200px;
+            margin: 2rem auto;
+            margin-top: 17%;
+        }
+        .form-container {
+            width: 100%;
+            backdrop-filter: blur(10px);
+            background-color: rgb(26, 35, 126, 0.8);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 10%;
+        }
+        .betting-field-container {
+            margin-top: 1rem;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            height: 20px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            display: flex;
+        }
+        .progress-bar .progress {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+            transition: width 0.5s ease-in-out;
+        }
+        .home-win {
+            background-color: #4caf50;
+        }
+        .draw {
+            background-color: #ffc107;
+        }
+        .away-win {
+            background-color: #f44336;
+        }
+        .team-container, .goal-container, .shots-container, .date-container {
+            display: flex;
+            width: 100%;
+            gap: 1rem;
+        }
+        .flex {
+            display: flex;
+        }
+        .flex-1 {
+            flex: 1;
+        }
+        .space-x-4 > * + * {
+            margin-left: 1rem;
+        }
+        .navbar{
+            background-color: rgb(26, 35, 126);
+        }
+        .custom-radio {
+            width: 15px; /* Adjust the width */
+            height: 15px; /* Adjust the height */
+            cursor: pointer;
+            /* Hide the default radio button */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid white; /* Color of the radio button border */
+            border-radius: 50%; /* Make it round */
+            position: relative;
+            outline: none;
+        }
+
+        .custom-radio:checked {
+            background-color: white; /* Color when checked */
+        }
+
+        .custom-label {
+            font-size: 1rem; /* Increase font size */
+            margin-left: 0.5rem; /* Space between radio and label */
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar p-4 fixed top-0 left-0 right-0 z-10">
+        <div class="container mx-auto flex justify-center">
+            <img src="/static/premier-league-logo-header-full.png" alt="Premier League Logo" class="h-12">
+        </div>
+    </nav>
+
+    <div class="custom-max-width mb-5 form-container">
+        <h1 class="text-2xl font-bold mb-6 text-center text-white">Match Predictions 24/25 Season</h1>
+
+        <form id="predictionForm" class="space-y-4">
+            <div class="team-container">
+                <div class="flex-1">
+                    <label for="HomeTeam" class="block text-sm font-medium text-white">Home Team</label>
+                    <select id="HomeTeam" name="HomeTeam" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="">Select home team</option>
+                        <option value="Arsenal">Arsenal</option>
+                        <option value="Aston Villa">Aston Villa</option>
+                        <option value="Bournemouth">Bournemouth</option>
+                        <option value="Brentford">Brentford</option>
+                        <option value="Brighton">Brighton</option>
+                        <option value="Chelsea">Chelsea</option>
+                        <option value="Crystal Palace">Crystal Palace</option>
+                        <option value="Everton">Everton</option>
+                        <option value="Fulham">Fulham</option>
+                        <option value="Ipswich">Ipswich</option>
+                        <option value="Leicester">Leicester</option>
+                        <option value="Liverpool">Liverpool</option>
+                        <option value="Man City">Man City</option>
+                        <option value="Man United">Man United</option>
+                        <option value="Newcastle">Newcastle</option>
+                        <option value="Nott'm Forest">Nott'm Forest</option>
+                        <option value="Southampton">Southampton</option>
+                        <option value="Tottenham">Tottenham</option>
+                        <option value="West Ham">West Ham</option>
+                        <option value="Wolves">Wolves</option>                        
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label for="AwayTeam" class="block text-sm font-medium text-white">Away Team</label>
+                    <select id="AwayTeam" name="AwayTeam" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option value="">Select away team</option>
+                        <option value="Arsenal">Arsenal</option>
+                        <option value="Aston Villa">Aston Villa</option>
+                        <option value="Bournemouth">Bournemouth</option>
+                        <option value="Brentford">Brentford</option>
+                        <option value="Brighton">Brighton</option>
+                        <option value="Chelsea">Chelsea</option>
+                        <option value="Crystal Palace">Crystal Palace</option>
+                        <option value="Everton">Everton</option>
+                        <option value="Fulham">Fulham</option>
+                        <option value="Ipswich">Ipswich</option>
+                        <option value="Leicester">Leicester</option>
+                        <option value="Liverpool">Liverpool</option>
+                        <option value="Man City">Man City</option>
+                        <option value="Man United">Man United</option>
+                        <option value="Newcastle">Newcastle</option>
+                        <option value="Nott'm Forest">Nott'm Forest</option>
+                        <option value="Southampton">Southampton</option>
+                        <option value="Tottenham">Tottenham</option>
+                        <option value="West Ham">West Ham</option>
+                        <option value="Wolves">Wolves</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="team-container">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-white">Home Team Form</label>
+                    <div class="flex">
+                        <div id="homeTeamForm"></div>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-white">Away Team Form</label>
+                    <div class="flex">
+                        <div id="awayTeamForm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="goal-container">
+                <div class="flex-1">
+                    <label for="HTHG" class="block text-sm font-medium text-white">Home Goals</label>
+                    <input type="number" id="HTHG" name="HTHG" placeholder="Enter amount" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="flex-1">
+                    <label for="HTAG" class="block text-sm font-medium text-white">Away Goals</label>
+                    <input type="number" id="HTAG" name="HTAG" placeholder="Enter amount" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div class="shots-container">
+                <div class="flex-1">
+                    <label for="HomeShots" class="mt-2 block text-sm font-medium text-white">Home Team Shots</label>
+                    <input type="number" id="HomeShots" name="HomeShots" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="flex-1">
+                    <label for="HomeShotsOnTarget" class="mt-2 block text-sm font-medium text-white">Home Team Shots on Target</label>
+                    <input type="number" id="HomeShotsOnTarget" name="HomeShotsOnTarget" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            
+                <div class="flex-1">
+                    <label for="AwayShots" class="mt-2 block text-sm font-medium text-white">Away Team Shots</label>
+                    <input type="number" id="AwayShots" name="AwayShots" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                <div class="flex-1">
+                    <label for="AwayShotsOnTarget" class="mt-2 block text-sm font-medium text-white">Away Team Shots on Target</label>
+                    <input type="number" id="AwayShotsOnTarget" name="AwayShotsOnTarget" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div class="betting-field-container">
+                <div class="flex">
+                    <div class="flex-1">
+                        <label for="BetHomeWin" class="block text-sm font-medium text-white">Bet Home Team Win</label>
+                        <input type="number" step="0.01" id="BetHomeWin" name="BetHomeWin" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="flex-1 ml-3">
+                        <label for="BetDraw" class="block text-sm font-medium text-white">Bet Draw</label>
+                        <input type="number" step="0.01" id="BetDraw" name="BetDraw" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="flex-1 ml-3">
+                        <label for="BetAwayWin" class="block text-sm font-medium text-white">Bet Away Team Win</label>
+                        <input type="number" step="0.01" id="BetAwayWin" name="BetAwayWin" required placeholder="Enter amount" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden input fields for Year and Month -->
+            <input type="hidden" id="year" name="year">
+            <input type="hidden" id="month" name="month">
+
+            <div class="text-center">
+                <button type="submit" class="w-half py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Predict</button>
+            </div>
+        </form>
+        <div id="predictionResult" class="mt-6 text-center text-lg text-gray-700">
+            <div class="progress-bar">
+                <div class="progress home-win" id="homeWinBar" style="width:0%"></div>
+                <div class="progress draw" id="drawBar" style="width:0%"></div>
+                <div class="progress away-win" id="awayWinBar" style="width:0%"></div>
+            </div>
+            <div class="flex text-white">
+                <p id="homePer" class="flex-1">Home</p>
+                <p id="drawPer" class="flex-1">Draw</p>
+                <p id="awayPer" class="flex-1">Away</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to generate radio buttons for form
+            function generateRadioButtons(containerId, prefix) {
+                const formOptions = ['Win', 'Draw', 'Lose'];
+                let html = '<div class="flex space-x-4">'; // Flex container for horizontal layout
+
+                // Loop to create 5 sets of radio buttons
+                for (let i = 1; i <= 5; i++) {
+                    html += `<div class="flex flex-col">`; // Use flex column for vertical layout
+                    html += `<span class="ml-6 font-medium text-white">Match ${i}</span>`; // Label for each match
+                    formOptions.forEach(option => {
+                        html += `
+                            <div class="ml-6">
+                                <input type="radio" id="${prefix}Form${i}${option}" name="${prefix}Form${i}" required value="${option}" class="mr-1 custom-radio">
+                                <label for="${prefix}Form${i}${option}" class="text-sm text-white custom-label">${option}</label>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                html += '</div>'; // Close the flex container
+                $(`#${containerId}`).html(html);
+            }
+
+            // Generate radio buttons
+            generateRadioButtons('homeTeamForm', 'HT');
+            generateRadioButtons('awayTeamForm', 'AT');
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = currentDate.getMonth() + 1;
+
+            $('#year').val(currentYear);
+            $('#month').val(currentMonth);
+
+            $('#predictionForm').on('submit', function(event) {
+                event.preventDefault();
+
+                var homeTeam = $('#HomeTeam').val();
+                var awayTeam = $('#AwayTeam').val();
+                var htHomeGoals = parseInt($('#HTHG').val()) || 0;
+                var htAwayGoals = parseInt($('#HTAG').val()) || 0;
+                var htForm = parseFloat($('#HTForm').val());
+                var atForm = parseFloat($('#ATForm').val());
+                var betHome = parseFloat($('#BetHomeWin').val());
+                var betDraw = parseFloat($('#BetDraw').val());
+                var betAway = parseFloat($('#BetAwayWin').val());
+
+                // Validation checks
+                if (homeTeam === awayTeam) {
+                    alert('Home team and away team cannot be the same.');
+                    return;
+                }
+
+                if (htHomeGoals < 0 || htAwayGoals < 0) {
+                    alert('Goal counts cannot be less than 0.');
+                    return;
+                }
+
+                if (htForm < 0 || atForm < 0) {
+                    alert('Team Form values cannot be less than 0.');
+                    return;
+                }
+
+                if (betHome < 0 || betDraw < 0 || betAway < 0) {
+                    alert('Betting values cannot be less than 0.');
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/predict',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        const homeWinProb = response.prediction[0][0] * 100;
+                        const drawProb = response.prediction[0][1] * 100;
+                        const awayWinProb = response.prediction[0][2] * 100;
+
+                        $('#homeWinBar').animate({ width: homeWinProb + '%' }, 500);
+                        $('#drawBar').animate({ width: drawProb + '%' }, 500);
+                        $('#awayWinBar').animate({ width: awayWinProb + '%' }, 500);
+
+                        $('#homePer').text('Home: '+ homeWinProb.toFixed(2) + '%');
+                        $('#drawPer').text('Draw: ' + drawProb.toFixed(2) + '%');
+                        $('#awayPer').text('Away: ' + awayWinProb.toFixed(2) + '%');
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        $('#predictionResult').html('Error occurred while making prediction.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
