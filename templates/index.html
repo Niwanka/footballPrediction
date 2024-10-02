@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -383,6 +384,7 @@
 
 // After
                     success: function(response) {
+                        console.log(response)
                         const homeWinProb = response.home_win_probability * 100;
                         const drawProb = response.draw_probability * 100;
                         const awayWinProb = response.away_win_probability * 100;

@@ -1,0 +1,7 @@
+# Ignore the virtual environment folder
+env/
+
+# Ignore other common files and folders
+__pycache__/
+*.pkl
+*.ipynb
