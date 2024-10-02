@@ -28,20 +28,20 @@ def predict():
 
     try:
         # Extract and convert form data
-        HomeTeam = data['homeTeam']
-        AwayTeam = data['awayTeam']
+        HomeTeam = data['HomeTeam']
+        AwayTeam = data['AwayTeam']
         year = int(data['year'])
         month = int(data['month'])
         mWeek = int(data['mWeek'])
-        HTHG = int(data['htHomeGoals'])
-        HTAG = int(data['htAwayGoals'])
+        HTHG = int(data['HTHG'])
+        HTAG = int(data['HTAG'])
         HShots = int(data['HShots'])
         AShots = int(data['AShots'])
         HShotsOT = int(data['HShotsOT'])
         AShotsOT = int(data['AShotsOT'])
-        BHome = float(data['betHome'])
-        BDraw = float(data['betDraw'])
-        BAway = float(data['betAway'])
+        BHome = float(request.form.get('betHome', 0))  # Provide a default value if not present
+        BDraw = float(request.form.get('betDraw', 0))
+        BAway = float(request.form.get('betAway', 0))
         Hform = int(data['htForm'])
         Aform = int(data['atForm'])
 
